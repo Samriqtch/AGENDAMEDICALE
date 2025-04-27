@@ -11,7 +11,7 @@ package agendamedicale;
 import java.time.LocalDate;
 public class Patient {
     
-        private String nom;
+    private String nom;
     private String prenom;
     private String telephone;
     private LocalDate datenaissance;
