@@ -20,7 +20,7 @@ public class Patient {
     private String sexe;
     
     // contructeur 
-    public  Patient(String nom, String prenom,String telephone,String email,String adresse,LocalDate datenaissance, String sexe) {
+    public Patient  (String nom, String prenom,String telephone,String email,String adresse,LocalDate datenaissance, String sexe) {
         //initialisation des attributs 
         this.nom=nom;
         this.prenom=prenom;
