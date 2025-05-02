@@ -8,6 +8,14 @@ package agendamedicale;
  *
  * @author kloug
  */
-public class medecin {
+public class GestionLogin {
+  
+    public boolean authentifier(String username,String password){
     
+        if((username.equals("username"))&&password.equals("password")){
+            
+            return true;
+        }
+        return false;
+    }
 }
