@@ -10,6 +10,8 @@ import java.sql.DriverManager;
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 /**
  *
  * @author kloug
@@ -45,7 +47,9 @@ public class AgMed extends javax.swing.JFrame {
      */
     public AgMed() {
         initComponents();
-        Connection = conn();
+        Connection Connection = conn();
+        chargerSpecialites();
+        chargerMedecin("");
         
     }
 
@@ -161,6 +165,11 @@ public class AgMed extends javax.swing.JFrame {
         jLabel7.setText("Specialite");
 
         specialite.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        specialite.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                specialiteActionPerformed(evt);
+            }
+        });
 
         AjouterRdv.setBackground(new java.awt.Color(51, 0, 51));
         AjouterRdv.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -457,6 +466,7 @@ public class AgMed extends javax.swing.JFrame {
             String Nom = nom.getText();
             String Prenom = prenom.getText();
             String Telephone = telephone.getText();
+            String Age = age.getText();
             String Adresse = adresse.getText();
             String Motif = motif.getText();
             String Specialite = (String) specialite.getSelectedItem();
@@ -474,7 +484,93 @@ public class AgMed extends javax.swing.JFrame {
             
             }
             String Heure = heure_rdv.getText();
+            // si les champ ne sont pas saisis
+            if(Nom.isEmpty()|| Prenom.isEmpty()||Specialite==null||Medecin==null||selectedUtilDate==null||Motif.isEmpty()||Telephone.isEmpty()||Adresse.isEmpty()||Age.isEmpty()){
+                
+                
+            
+            }
+            
+            
     }//GEN-LAST:event_AjouterRdvActionPerformed
+    // chargement des données de l attribut specialite contenus dans la table medecin
+    private void chargerSpecialites(){
+        
+        specialite.removeAllItems();
+        try {
+        
+                String query = "SELECT DISTINCT specialite FROM medecin";
+                preparedStatement = connection.prepareStatement(query);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                
+                while(resultSet.next()){
+                        
+                      specialite.addItem(resultSet.getString("specialite"));
+                        
+                }
+                resultSet.close();
+        }catch (SQLException ex){
+                
+            JOptionPane.showMessageDialog(this,"Erreur chargement"+ex.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+            System.err.println("Erreur chargement specialites"+ex.getMessage());
+        }    
+    }
+    
+   // chargement des données de l'attribut nom du medecin contenus dans la table medecin
+    
+    private void chargerMedecins(String specialite){
+        
+        medecin.removeAllItems();
+        if(specialite !=null && !specialite.isEmpty()){
+        
+            try {
+                    String query = "SELECT nom FROM medecin WHERE specialite = ?";
+                    preparedStatement = connection.prepareStatement(query);
+                    preparedStatement.setString(1,specialite);
+                    ResultSet resultSet = preparedStatement.executeQuery();
+                    while(resultSet.next()){
+                        medecin.addItem(resultSet.getString("nom"));
+                    
+                    }
+                    resultSet.close();
+            
+            
+            }catch(SQLException ex) {
+            
+                JOptionPane.showMessageDialog(this,"Erreur du chargement"+ex.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+                System.err.println("Erreur chargement medecin"+ex.getMessage());
+            }
+        
+        }else {
+            try{
+            
+                    String query = "SELECT nom from medecin";
+                    preparedStatement = connection.prepareStatement(query);
+                    ResultSet resultSet = preparedStatement.executeQuery();
+                    while(resultSet.next()){
+                            medecin.addItem(resultSet.getString("nom"));
+                    }
+                    resultSet.close();
+            }catch (SQLException ex){
+            
+                        JOptionPane.showMessageDialog(this,"Erreur chargement"+ex.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+                        System.err.println("Erreur chargement medecins"+ex.getMessage());
+            }
+        
+        
+        }
+    
+    }
+    
+    private void specialiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_specialiteActionPerformed
+        // TODO add your handling code here:
+        
+        String Specialite = (String) specialite.getSelectedItem();
+        chargerMedecins(Specialite);
+    }//GEN-LAST:event_specialiteActionPerformed
+
+    // Charger les specialite contenu dans la table medecin 
+    
 
     /**
      * @param args the command line arguments
