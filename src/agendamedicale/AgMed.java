@@ -608,6 +608,7 @@ public class AgMed extends javax.swing.JFrame {
                                             heure_rdv.setText("");
                                             specialite.setSelectedIndex(0);
                                             chargerMedecin("");
+                                            afficherRendezVousDansTable();
                                             
                                             
                                             
@@ -787,7 +788,52 @@ private void chargerSpecialites(){
 
     // Charger les specialite contenu dans la table medecin 
     
-
+    private void afficherRendezVousDansTable(){
+         //afficher les données dans la table        
+        try {
+            String query = "SELECT p.nom, p.prenom, p.telephone, p.motif, p.adresse, m.nom, m.prenom, r.date_rdv, r.heure_rdv FROM rendezvous r JOIN patient p ON r.id_patient = p.id_patient JOIN medecin m ON r.id_medecin = m.id_medecin";
+            preparedStatement = connection.prepareStatement(query);
+            ResultSet rs = preparedStatement .executeQuery();
+            
+            //récupération des info de la table 
+            javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0);
+            
+            while (rs.next()){
+                        String nomPatient = rs.getString("p.nom");
+                        String prenomPatient = rs.getString("p.prenom");
+                        String telephone = rs.getString("p.telephone");
+                        String motifRdv = rs.getString("p.motif");
+                        String adresse = rs.getString("p.adresse");
+                        String nomMedecin = rs.getString("m.nom");
+                        String dateRdv = rs.getString("r.date_rdv");
+                        String heureRdv = rs.getString("r.heure_rdv");
+                        
+                        model.addRow(new Object[]{nomPatient,prenomPatient,telephone,motifRdv,adresse,nomMedecin,dateRdv,heureRdv});
+                    
+            }
+            rs.close();
+        
+        
+        }catch (SQLException ex){
+                
+                JOptionPane.showMessageDialog(this,"Erreur lors de l'affichage des rendez vous"+ex.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+        
+        }finally{
+        
+                try{
+                
+                        if(preparedStatement != null) preparedStatement.close();
+                } catch (SQLException ex) {
+                
+                        ex.printStackTrace();
+                }
+        
+        }
+    
+    
+    }
     /**
      * @param args the command line arguments
      */
