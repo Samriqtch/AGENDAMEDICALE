@@ -20,14 +20,14 @@ public class AgMed extends javax.swing.JFrame {
     
     private Connection connection;
     private PreparedStatement preparedStatement;
-    private
+    
     
     // Connection à la base de donnée 
-    public static Connection conn(){
-    
+    public  Connection conn(){
+    /*
         try{
             
-            String url = "jdbc:mysql://localhost:3306/bd_rdv"; //définition de l’URL de connexion a la  base de données  
+            String url = "jdbc:mysql://localhost:3307/bd_rdv"; //définition de l’URL de connexion a la  base de données  
             Class.forName("com.mysql.cj.jdbc.Driver"); // chargement  dynamique du  driver JDBC de MySQL
             Connection conn  = DriverManager.getConnection(url);
             return conn;
@@ -36,9 +36,37 @@ public class AgMed extends javax.swing.JFrame {
         
                 JOptionPane.showMessageDialog(null, e);
         
-        }
+        }*/
         
-        return null;
+            String url = "jdbc:mysql://localhost:3307/bd_rdv"; //définition de l’URL de connexion a la  base de données  
+            String user = "samson"; // Remplacez par votre nom d'utilisateur MySQL XAMPP
+            String password = ""; // Remplacez par votre mot de passe MySQL XAMPP
+
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                connection = DriverManager.getConnection(url, user, password);
+                // ...
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Erreur de connexion à la base de données : " + e.getMessage());
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                JOptionPane.showMessageDialog(null, "Pilote JDBC MySQL non trouvé.");
+                e.printStackTrace();
+            }
+        
+            return connection;
+            
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+      //  return null;
     
     } 
 
@@ -47,7 +75,7 @@ public class AgMed extends javax.swing.JFrame {
      */
     public AgMed() {
         initComponents();
-        Connection Connection = conn();
+        connection  = conn();
         chargerSpecialites();
         chargerMedecin("");
         
@@ -86,15 +114,15 @@ public class AgMed extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         date_rdv = new com.toedter.calendar.JDateChooser();
         jLabel11 = new javax.swing.JLabel();
-        heure_rdv = new javax.swing.JLabel();
         ModifierRdv = new javax.swing.JButton();
         VoirListRdv = new javax.swing.JButton();
         ActualiserRdv = new javax.swing.JButton();
         medecin = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
+        jLabel12 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jLabel12 = new javax.swing.JLabel();
+        heure_rdv = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -203,10 +231,6 @@ public class AgMed extends javax.swing.JFrame {
         jLabel11.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
         jLabel11.setText("Heure");
 
-        heure_rdv.setBackground(new java.awt.Color(255, 255, 255));
-        heure_rdv.setText("jLabel12");
-        heure_rdv.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
-
         ModifierRdv.setBackground(new java.awt.Color(51, 255, 51));
         ModifierRdv.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         ModifierRdv.setForeground(new java.awt.Color(255, 255, 255));
@@ -239,6 +263,21 @@ public class AgMed extends javax.swing.JFrame {
 
         medecin.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 950, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 359, Short.MAX_VALUE)
+        );
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 3, 24)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel12.setText("LISTES DES RENDEZ VOUS ");
+
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null},
@@ -252,21 +291,6 @@ public class AgMed extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 950, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-
-        jLabel12.setFont(new java.awt.Font("Tahoma", 3, 24)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(255, 0, 0));
-        jLabel12.setText("LISTES DES RENDEZ VOUS ");
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -276,68 +300,79 @@ public class AgMed extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(52, 52, 52)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(jPanel3Layout.createSequentialGroup()
-                                    .addGap(361, 361, 361)
-                                    .addComponent(jLabel11)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(heure_rdv, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel3Layout.createSequentialGroup()
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(adresse, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
-                                        .addComponent(nom))
-                                    .addGap(26, 26, 26)
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(11, 11, 11)
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(prenom, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
-                                        .addComponent(telephone))
-                                    .addGap(18, 18, 18)
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(jPanel3Layout.createSequentialGroup()
-                                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(age, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGap(14, 14, 14)))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 977, Short.MAX_VALUE)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(AjouterRdv, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(47, 47, 47)
-                                .addComponent(AnnulerRdv, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(53, 53, 53)
-                                .addComponent(ModifierRdv, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(56, 56, 56)
-                                .addComponent(VoirListRdv, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(ActualiserRdv, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(jPanel3Layout.createSequentialGroup()
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(specialite, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(jLabel9)
-                                    .addGap(49, 49, 49)
-                                    .addComponent(medecin, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jLabel10)
-                                    .addGap(18, 18, 18)
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(motif)
-                                        .addComponent(date_rdv, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)))
-                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGap(358, 358, 358)
+                                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(heure_rdv, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addComponent(AjouterRdv, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(47, 47, 47)
+                                        .addComponent(AnnulerRdv, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(53, 53, 53)
+                                        .addComponent(ModifierRdv, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(56, 56, 56)
+                                        .addComponent(VoirListRdv, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(ActualiserRdv, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(35, 35, 35)
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(adresse, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+                                            .addComponent(nom))
+                                        .addGap(26, 26, 26)
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(11, 11, 11))
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(specialite, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel9)
+                                        .addGap(35, 35, 35)))
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addComponent(medecin, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(26, 26, 26)
+                                        .addComponent(jLabel10)
+                                        .addGap(18, 18, 18)
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(motif)
+                                            .addComponent(date_rdv, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)))
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(prenom, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+                                            .addComponent(telephone))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(234, 234, 234))
+                                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(28, 28, 28)
+                                                .addComponent(age))))))))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(312, 312, 312)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 514, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(382, 382, 382)
+                        .addGap(364, 364, 364)
                         .addComponent(jLabel12)))
-                .addContainerGap(463, Short.MAX_VALUE))
+                .addGap(463, 463, 463))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -369,22 +404,24 @@ public class AgMed extends javax.swing.JFrame {
                         .addComponent(jLabel10)
                         .addComponent(medecin, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(date_rdv, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
+                .addGap(43, 43, 43)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
-                    .addComponent(heure_rdv, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34)
+                    .addComponent(heure_rdv, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(43, 43, 43)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(AjouterRdv, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(AnnulerRdv, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ModifierRdv, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(VoirListRdv, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ActualiserRdv, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(45, 45, 45)
-                .addComponent(jLabel12)
                 .addGap(18, 18, 18)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(58, 58, 58)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -484,17 +521,174 @@ public class AgMed extends javax.swing.JFrame {
             
             }
             String Heure = heure_rdv.getText();
+            if(Heure.isEmpty()){
+                
+                JOptionPane.showMessageDialog(this,"Veuillez choisir une heure ","erreur",JOptionPane.WARNING_MESSAGE);
+            }
             // si les champ ne sont pas saisis
-            if(Nom.isEmpty()|| Prenom.isEmpty()||Specialite==null||Medecin==null||selectedUtilDate==null||Motif.isEmpty()||Telephone.isEmpty()||Adresse.isEmpty()||Age.isEmpty()){
+            if(Nom.isEmpty()|| Prenom.isEmpty()||Specialite==null||Medecin==null||selectedUtilDate==null||Motif.isEmpty()||Telephone.isEmpty()||Adresse.isEmpty()||Age.isEmpty()||Heure.isEmpty()){
                 
-                
+                JOptionPane.showMessageDialog(this,"Veuillez remplir tous les champs obligatoire","Erreur",JOptionPane.WARNING_MESSAGE);
+                return;
             
             }
+            int id_patient =-1;
+                try{
+                                 String insertPatientQuery = "INSERT INTO patient (nom, prenom, telephone, adresse, age,motif) VALUES (?, ?, ?, ?, ?,?)";
+                                preparedStatement = connection.prepareStatement(insertPatientQuery, java.sql.Statement.RETURN_GENERATED_KEYS);
+                                // ... définir les paramètres pour le patient ...
+                                
+                                preparedStatement.setString(1,Nom);
+                                preparedStatement.setString(2, Prenom);
+                                preparedStatement.setString(3,Telephone);
+                                preparedStatement.setString(4,Adresse);
+                                preparedStatement.setString(5,Age);
+                                preparedStatement.setString(6, Motif);
+                                preparedStatement.executeUpdate();
+                                ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+                                if (generatedKeys.next()) {
+                                    id_patient = generatedKeys.getInt(1); // Récupérer l'ID généré
+                                } 
+                                generatedKeys.close();
+
+                }catch (SQLException ex){
+                
+                          JOptionPane.showMessageDialog(this,"Erreur lors de l'enregistrement"+ex.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+                          return;
+                
+                
+                }finally { //nouvelle ligne 
+                    
+                    if(preparedStatement !=null){
+                        try{
+                                preparedStatement.close();
+                        }catch (SQLException ex){
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+                
+              
+                /*
+                try{
+                                 String selectPatientQuery = "SELECT id_patient FROM patient WHERE nom = ? AND prenom = ?"; // Assurez-vous du nom de la colonne ID
+                                preparedStatement = connection.prepareStatement(selectPatientQuery);
+                                // ... définir les paramètres pour la recherche du patient ...
+                                ResultSet patientResult = preparedStatement.executeQuery();
+                                if (patientResult.next()) {
+                                    id_patient = patientResult.getInt("id_patient"); // Récupérer l'ID existant
+                                    // ... (éventuellement mettre à jour d'autres infos du patient) ...
+                                } 
+                                patientResult.close();
+                }catch (SQLException ex){
+                    
+                     JOptionPane.showMessageDialog(this,"Erreur de récupération de l id "+ex.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+                      return;
+                
+                }*/
+                
+               if(id_patient !=-1){
+               
+                                  try{
+                                  
+                                            String insertRendezvousQuery = "INSERT INTO rendezvous (id_patient,id_medecin,date_rdv,heure_rdv) VALUES(?,?,?,?)";
+                                            preparedStatement = connection.prepareStatement(insertRendezvousQuery);
+                                            preparedStatement.setInt(1,id_patient);
+                                            preparedStatement.setInt(2, Integer.parseInt(Medecin.split(" - ")[0]));
+                                           // preparedStatement.setString(3, Motif);
+                                            preparedStatement.setString(3,dateRdvString);
+                                            preparedStatement.setString(4, Heure);
+                                            preparedStatement.executeUpdate();
+                                            JOptionPane.showMessageDialog(this,"le rendez vous a été enregistré");
+                                            nom.setText("");
+                                            prenom.setText("");
+                                            adresse.setText("");
+                                           // motif.setText("");
+                                            date_rdv.setDate(null);
+                                            heure_rdv.setText("");
+                                            specialite.setSelectedIndex(0);
+                                            chargerMedecin("");
+                                            
+                                            
+                                            
+                                  
+                                  }catch(SQLException ex ){
+                                            JOptionPane.showMessageDialog(this,"Erreur de enregistrement :"+ex.getMessage(),"erreur",JOptionPane.ERROR_MESSAGE);
+                                  
+                                  }finally{
+                                  
+                                            if(preparedStatement != null){
+                                                        
+                                                        try{
+                                                                    preparedStatement.close(); 
+                                                        
+                                                        } catch(SQLException ex) {
+                                                            ex.printStackTrace();
+                                                        
+                                                        }
+                                            
+                                            
+                                            }
+                                  
+                                  }
+               
+               }
+
+                                
+                                
+
             
+           /* int id_medecin = -1;
+            try {
+                
+                String selectMedecinIdQuery = "SELECT id_medecin FROM medecin WHERE nom = ? AND specialite = ?";
+                preparedStatement = connection.prepareStatement(selectMedecinIdQuery);
+                preparedStatement.setString(1,Nom);
+                preparedStatement.setString(2,Specialite);
+                ResultSet medecinResult = preparedStatement.executeQuery();
+                if ( medecinResult.next()){
+                    
+                    id_medecin = medecinResult.getInt("id_medecin");
+                    
+                
+                }
+                medecinResult.close();
             
+            }catch(SQLException ex){
+                
+                JOptionPane.showMessageDialog(this,"Erreur de récupération de l id "+ex.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+                return;
+            
+            }*/
+            /*if(id_medecin != -1){
+            
+                        try{
+                            
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                            dateRdvString = sdf.format(selectedUtilDate);
+                            
+                                String insertRendezvousQuery = "INSERT INTO rendezvous (id_patient,id_medecin, motif, date_rdv, heure_rdv) VALUES (?, ?, ?, ?, ?)";
+                                PreparedStatement insertRdvStmt = connection.prepareStatement(insertRendezvousQuery);
+                                insertRdvStmt.setInt(1, id_patient); // Assurez-vous d'avoir récupéré l'ID du patient
+                                insertRdvStmt.setInt(2, id_medecin);
+                                insertRdvStmt.setString(3, Motif);
+                                insertRdvStmt.setString(4, dateRdvString);
+                                insertRdvStmt.setString(5, Heure);
+                                insertRdvStmt.executeUpdate();
+                                insertRdvStmt.close();
+                                JOptionPane.showMessageDialog(this,"Le rendez-vous a été enrégistré ");
+                            
+                        
+                        }catch(SQLException ex) 
+                                {
+                                        JOptionPane.showMessageDialog(this,"Erreur lors de l'enregistrement"+ex.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
+                        
+                        }
+            
+            }*/           
     }//GEN-LAST:event_AjouterRdvActionPerformed
-    // chargement des données de l attribut specialite contenus dans la table medecin
-    private void chargerSpecialites(){
+
+private void chargerSpecialites(){
         
         specialite.removeAllItems();
         try {
@@ -518,18 +712,20 @@ public class AgMed extends javax.swing.JFrame {
     
    // chargement des données de l'attribut nom du medecin contenus dans la table medecin
     
-    private void chargerMedecins(String specialite){
+    private void chargerMedecin(String specialite){
         
         medecin.removeAllItems();
         if(specialite !=null && !specialite.isEmpty()){
         
             try {
-                    String query = "SELECT nom FROM medecin WHERE specialite = ?";
+                    String query = "SELECT id_medecin, nom FROM medecin WHERE specialite = ?";
                     preparedStatement = connection.prepareStatement(query);
                     preparedStatement.setString(1,specialite);
                     ResultSet resultSet = preparedStatement.executeQuery();
                     while(resultSet.next()){
-                        medecin.addItem(resultSet.getString("nom"));
+                        int idmedecin = resultSet.getInt("id_medecin");
+                        String nom = resultSet.getString("nom");
+                        medecin.addItem(idmedecin+" - "+nom);
                     
                     }
                     resultSet.close();
@@ -539,34 +735,54 @@ public class AgMed extends javax.swing.JFrame {
             
                 JOptionPane.showMessageDialog(this,"Erreur du chargement"+ex.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
                 System.err.println("Erreur chargement medecin"+ex.getMessage());
+            }finally {
+            
+                        try {
+                                
+                                if (preparedStatement !=null) preparedStatement.close();
+                        }catch (SQLException ex){
+                                ex.printStackTrace();
+                        
+                        }
+            
             }
         
         }else {
             try{
             
-                    String query = "SELECT nom from medecin";
+                    String query = "SELECT id_medecin, nom from medecin";
                     preparedStatement = connection.prepareStatement(query);
                     ResultSet resultSet = preparedStatement.executeQuery();
                     while(resultSet.next()){
-                            medecin.addItem(resultSet.getString("nom"));
+                            int idmedecin = resultSet.getInt("id_medecin");
+                            String nom = resultSet.getString("nom");
+                            medecin.addItem(idmedecin+" - "+nom);
                     }
                     resultSet.close();
             }catch (SQLException ex){
             
                         JOptionPane.showMessageDialog(this,"Erreur chargement"+ex.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
                         System.err.println("Erreur chargement medecins"+ex.getMessage());
-            }
-        
+            }finally {
+                    try {
+                    
+                      if(preparedStatement != null) preparedStatement.close();
+                    }catch(SQLException ex){
+                        ex.printStackTrace();      
+           }
         
         }
     
     }
-    
+    }
+        
+        
+        
     private void specialiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_specialiteActionPerformed
         // TODO add your handling code here:
         
         String Specialite = (String) specialite.getSelectedItem();
-        chargerMedecins(Specialite);
+        chargerMedecin(Specialite);
     }//GEN-LAST:event_specialiteActionPerformed
 
     // Charger les specialite contenu dans la table medecin 
@@ -628,7 +844,7 @@ public class AgMed extends javax.swing.JFrame {
     private javax.swing.JTextField adresse;
     private javax.swing.JTextField age;
     private com.toedter.calendar.JDateChooser date_rdv;
-    private javax.swing.JLabel heure_rdv;
+    private javax.swing.JTextField heure_rdv;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
